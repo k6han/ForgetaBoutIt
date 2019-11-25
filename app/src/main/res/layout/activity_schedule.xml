@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="35dp"
-        android:layout_marginBottom="27dp"
+        android:layout_marginBottom="30dp"
         android:layout_toStartOf="@+id/toSettings"
         android:text="Schedule" />
 
@@ -43,7 +43,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="35dp"
         android:layout_marginEnd="35dp"
-        android:layout_marginBottom="29dp"
+        android:layout_marginBottom="30dp"
         android:layout_toStartOf="@+id/toSchedule"
         android:text="Home" />
 

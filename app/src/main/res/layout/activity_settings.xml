@@ -6,15 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Settings"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/toSettings"
         android:layout_width="wrap_content"
@@ -31,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="35dp"
-        android:layout_marginBottom="27dp"
+        android:layout_marginBottom="30dp"
         android:layout_toStartOf="@+id/toSettings"
         android:text="Schedule" />
 
@@ -43,7 +34,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="35dp"
         android:layout_marginEnd="35dp"
-        android:layout_marginBottom="29dp"
+        android:layout_marginBottom="30dp"
         android:layout_toStartOf="@+id/toSchedule"
         android:text="Home" />
 
