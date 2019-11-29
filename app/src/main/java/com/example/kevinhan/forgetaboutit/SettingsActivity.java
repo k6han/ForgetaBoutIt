@@ -49,6 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        // Button to navigate to home
         toHome = (Button)findViewById(R.id.toHome);
         toHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,6 +58,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        // Button to navigate to schedule
         toSchedule = (Button) findViewById(R.id.toSchedule);
         toSchedule.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +67,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        // Initialize text and button for Bluetooth
         btStatus = (TextView) findViewById(R.id.statusBt);
 
         connBt = (Button) findViewById(R.id.connectBt);
@@ -74,8 +77,10 @@ public class SettingsActivity extends AppCompatActivity {
 
                 btStatus.setText("Status: Connecting");
 
+                // Set up adapter and enable bluetooth
                 btAdapter = BluetoothAdapter.getDefaultAdapter();
 
+                // Error message
                 if(btAdapter == null){
                     Context context = getApplicationContext();
                     CharSequence txt = "Device does not support bluetooth";
@@ -89,12 +94,14 @@ public class SettingsActivity extends AppCompatActivity {
                     startActivityForResult(enableBluetooth, 0);
                 }
 
+                // Set up device and password
                 btDevice = btAdapter.getRemoteDevice(macAddress);
 
                 String pin = "1234";
                 btDevice.setPin(pin.getBytes());
                 btDevice.createBond();
 
+                // Attempt to connect
                 try {
                     btSocket = btDevice.createRfcommSocketToServiceRecord(myID);
                 } catch (Exception e) {}
@@ -115,6 +122,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        // Set up text and tag receiving button
         getTag = (Button) findViewById(R.id.getSetup);
         tag = (TextView) findViewById(R.id.displayTag);
 
@@ -123,10 +131,12 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 try{
+                    // Prompt arduino for input
                     os = btSocket.getOutputStream();
 
                     os.write(1);
 
+                    // Attempt to read input in separate thread
                     new ConnectedThread( btSocket );
 
                 } catch(Exception e){
@@ -141,22 +151,33 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Helper method to navigate to home
+     */
     public void openHome(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Helper method to navigate to schedule
+     */
     public void openSchedule(){
         Intent intent = new Intent(this, ScheduleActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Thread to read input
+     */
     private class ConnectedThread extends Thread {
         BluetoothSocket bts;
         InputStream is;
         byte[] buffer;
 
         public ConnectedThread(BluetoothSocket b) {
+
+            // Set up input stream
             bts = b;
             InputStream tmp = null;
 
@@ -175,20 +196,22 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         public void run() {
-            buffer = new byte[1024];
-
             String tmp = "";
 
             while (true) {
                 try {
+                    // Read character by character
                     char a = (char) is.read();
 
                     while (a != '\n') {
                         tmp = tmp + a;
                         a = (char) is.read();
                     }
+
+                    // Stop reading on newline, generate string
                     final String string = new String(tmp.getBytes(), "UTF-8");
 
+                    // Store string to array of inputs, until 5 inputs have been read
                     if(inputIdx < 5){
                         inputs[inputIdx] = string;
                     } else {
@@ -201,6 +224,8 @@ public class SettingsActivity extends AppCompatActivity {
                     break;
                 }
             }
+
+            cancel();
         }
 
         public void cancel(){
