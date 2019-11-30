@@ -146,7 +146,6 @@ public class SettingsActivity extends AppCompatActivity {
                     toast.show();
                 }
 
-                tag.setText("Tag ID: " + inputs[0]);
             }
         });
     }
@@ -217,6 +216,8 @@ public class SettingsActivity extends AppCompatActivity {
                     } else {
                         break;
                     }
+
+                    tag.setText("Tag ID: " + inputs[0]);
 
                     tmp = "";
 

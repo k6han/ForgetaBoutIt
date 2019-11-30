@@ -1,5 +1,7 @@
 package com.example.kevinhan.forgetaboutit;
 
+import android.os.Parcelable;
+
 /**
  * enum representing the 7 days of the week
  */

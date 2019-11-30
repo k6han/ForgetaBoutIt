@@ -1,5 +1,9 @@
 package com.example.kevinhan.forgetaboutit;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -10,7 +14,7 @@ import java.util.ArrayList;
  * This class also has a reference to another Day
  * object to allow making linked-lists
  */
-public class Day {
+public class Day implements Parcelable {
 
 	//list of events
 	private List<Event> events;
@@ -30,6 +34,11 @@ public class Day {
 		events = new ArrayList<Event>();
 		nextDay = null;
 		this.dayWeek = dayWeek;
+	}
+
+	public Day(Parcel source){
+		events = new ArrayList<Event>(Arrays.asList(source.createTypedArray(com.example.kevinhan.forgetaboutit.Event.CREATOR)));
+		nextDay = source.readParcelable(com.example.kevinhan.forgetaboutit.Day.class.getClassLoader());
 	}
 
 	/**
@@ -94,4 +103,29 @@ public class Day {
 	public List<Event> getEvents() {
 		return events;
 	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeTypedArray((Parcelable[])events.toArray(), 0);
+		dest.writeValue(dayWeek);
+		dest.writeParcelable(nextDay, 0);
+	}
+
+	public static final Parcelable.Creator<Day>CREATOR
+			= new Parcelable.Creator<Day>() {
+		@Override
+		public Day createFromParcel(Parcel source) {
+			return new Day(source);
+		}
+
+		@Override
+		public Day[] newArray(int size) {
+			return new Day[size];
+		}
+	};
 }

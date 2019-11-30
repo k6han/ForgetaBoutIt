@@ -1,13 +1,18 @@
 package com.example.kevinhan.forgetaboutit;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * represents a single event or class
  * and the corresponding required items
  */
-public class Event {
+public class Event implements Parcelable {
 
 	//set of all items needed for this event
 	private Set<Item> items;
@@ -24,6 +29,10 @@ public class Event {
 	public Event(int time) {
 		items = new HashSet<Item>();
 		this.time = time;
+	}
+
+	public Event(Parcel source){
+		items = new HashSet<Item>(Arrays.asList(source.createTypedArray(com.example.kevinhan.forgetaboutit.Item.CREATOR)));
 	}
 
 	/**
@@ -82,4 +91,28 @@ public class Event {
 		}
 		return result;
 	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeTypedArray((Parcelable[])items.toArray(), 0);
+		dest.writeInt(time);
+	}
+
+	public static final Parcelable.Creator<Event>CREATOR
+			= new Parcelable.Creator<Event>() {
+		@Override
+		public Event createFromParcel(Parcel source) {
+			return new Event(source);
+		}
+
+		@Override
+		public Event[] newArray(int size) {
+			return new Event[size];
+		}
+	};
 }

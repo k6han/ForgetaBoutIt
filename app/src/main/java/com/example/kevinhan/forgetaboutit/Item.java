@@ -1,10 +1,13 @@
 package com.example.kevinhan.forgetaboutit;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * This class represents an Item that can be detected by
  * the device. It stores the RF-id and name of the item.
  */
-public class Item {
+public class Item implements Parcelable {
 
 	//the id that the rf-id sensors detect
 	private String id;
@@ -32,6 +35,11 @@ public class Item {
 	public Item(String id, String name) {
 		this.id = id;
 		this.name = name;
+	}
+
+	public Item(Parcel source){
+		id = source.readString();
+		name = source.readString();
 	}
 
 	/**
@@ -91,4 +99,28 @@ public class Item {
 	public int hashCode() {
 		return id.hashCode();
 	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(id);
+		dest.writeString(name);
+	}
+
+	public static final Parcelable.Creator<Item>CREATOR
+			= new Parcelable.Creator<Item>() {
+		@Override
+		public Item createFromParcel(Parcel source) {
+			return new Item(source);
+		}
+
+		@Override
+		public Item[] newArray(int size) {
+			return new Item[size];
+		}
+	};
 }

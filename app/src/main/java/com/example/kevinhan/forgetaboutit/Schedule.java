@@ -1,5 +1,8 @@
 package com.example.kevinhan.forgetaboutit;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
@@ -9,7 +12,7 @@ import java.util.ArrayList;
  * this class contains a circular linked
  * list of days
  */
-public class Schedule {
+public class Schedule implements Parcelable {
 
 	//constant: time in advance to send notifications
 	//(in minutes)
@@ -39,6 +42,10 @@ public class Schedule {
 		while (currDay.getDayWeek() != dayWeek) {
 			currDay = currDay.nextDay();
 		}
+	}
+
+	public Schedule(Parcel source){
+		currDay = source.readParcelable(com.example.kevinhan.forgetaboutit.Day.class.getClassLoader());
 	}
 
 	/**
@@ -82,4 +89,27 @@ public class Schedule {
 		}
 		return result;
 	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeParcelable(currDay, 0);
+	}
+
+	public static final Parcelable.Creator<Schedule>CREATOR
+			= new Parcelable.Creator<Schedule>() {
+		@Override
+		public Schedule createFromParcel(Parcel source) {
+			return new Schedule(source);
+		}
+
+		@Override
+		public Schedule[] newArray(int size) {
+			return new Schedule[size];
+		}
+	};
 }
