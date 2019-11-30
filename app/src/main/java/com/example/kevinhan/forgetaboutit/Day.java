@@ -38,6 +38,7 @@ public class Day implements Parcelable {
 
 	public Day(Parcel source){
 		events = new ArrayList<Event>(Arrays.asList(source.createTypedArray(com.example.kevinhan.forgetaboutit.Event.CREATOR)));
+		dayWeek = (DayWeek) source.readSerializable();
 		nextDay = source.readParcelable(com.example.kevinhan.forgetaboutit.Day.class.getClassLoader());
 	}
 
@@ -112,7 +113,7 @@ public class Day implements Parcelable {
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeTypedArray((Parcelable[])events.toArray(), 0);
-		dest.writeValue(dayWeek);
+		dest.writeSerializable(dayWeek);
 		dest.writeParcelable(nextDay, 0);
 	}
 
