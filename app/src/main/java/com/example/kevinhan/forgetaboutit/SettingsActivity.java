@@ -39,6 +39,8 @@ public class SettingsActivity extends AppCompatActivity {
     InputStream is;
     OutputStream os;
 
+    Schedule schedule;
+
     Button getTag;
     TextView tag;
     String[] inputs = new String[5];
@@ -48,6 +50,9 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        Intent intent = getIntent();
+        schedule = intent.getParcelableExtra("EXTRA_SCHEDULE");
 
         // Button to navigate to home
         toHome = (Button)findViewById(R.id.toHome);
@@ -155,6 +160,8 @@ public class SettingsActivity extends AppCompatActivity {
      */
     public void openHome(){
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("EXTRA_SCHEDULE", schedule);
+
         startActivity(intent);
     }
 
@@ -163,6 +170,8 @@ public class SettingsActivity extends AppCompatActivity {
      */
     public void openSchedule(){
         Intent intent = new Intent(this, ScheduleActivity.class);
+        intent.putExtra("EXTRA_SCHEDULE", schedule);
+
         startActivity(intent);
     }
 

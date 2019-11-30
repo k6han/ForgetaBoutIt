@@ -12,10 +12,15 @@ public class ScheduleActivity extends AppCompatActivity {
     Button toHome;
     Button toSettings;
 
+    Schedule schedule;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
+
+        Intent intent = getIntent();
+        schedule = intent.getParcelableExtra("EXTRA_SCHEDULE");
 
         toHome = (Button)findViewById(R.id.toHome);
         toHome.setOnClickListener(new View.OnClickListener() {
@@ -36,11 +41,15 @@ public class ScheduleActivity extends AppCompatActivity {
 
     public void openHome(){
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("EXTRA_SCHEDULE", schedule);
+
         startActivity(intent);
     }
 
     public void openSettings(){
         Intent intent = new Intent(this, SettingsActivity.class);
+        intent.putExtra("EXTRA_SCHEDULE", schedule);
+
         startActivity(intent);
     }
 }
