@@ -49,6 +49,19 @@ public class Schedule implements Parcelable {
 	}
 
 	/**
+	 * adds event to specified day of the week
+	 * @param dayWeek day of the week
+	 * @param event   event to be added
+	 */
+	public void addEvent(DayWeek dayWeek, Event event) {
+		Day day = currDay;
+		while (day.getDayWeek() != dayWeek) {
+			day = day.nextDay();
+		}
+		day.add(event);
+	}
+
+	/**
 	 * get the current Day object
 	 * @return current Day object
 	 */
