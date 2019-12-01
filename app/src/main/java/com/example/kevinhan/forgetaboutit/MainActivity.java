@@ -21,6 +21,7 @@ import android.widget.Toast;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     TextView item4;
 
     Button testNotif;
+
+    Button display;
 
     TextView mitem1;
     TextView mitem2;
@@ -126,14 +129,15 @@ public class MainActivity extends AppCompatActivity {
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        if(btAdapter != null){
-            btConnection();
-        }
 
         refresh = (Button) findViewById(R.id.refresh);
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(btAdapter != null || (btSocket != null && !btSocket.isConnected())){
+                    btConnection();
+                }
 
                 try {
                     os = btSocket.getOutputStream();
@@ -147,9 +151,11 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception e){
                     Context context = getApplicationContext();
                     CharSequence txt = "Failed to send input";
-                    Toast toast = Toast.makeText(context, txt, Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(context, txt, Toast.LENGTH_SHORT);
                     toast.show();
                 }
+
+                inputDone = false;
             }
         });
 
@@ -157,6 +163,11 @@ public class MainActivity extends AppCompatActivity {
         testNotif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(btAdapter != null || (btSocket != null && !btSocket.isConnected())){
+                    btConnection();
+                }
+
                 try {
                     os = btSocket.getOutputStream();
 
@@ -174,34 +185,38 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 while(true){
-                    if(inputDone) break;
+                    if(inputDone) {
+                        inputDone = false;
+                        break;
+                    }
                 }
 
                 List<Item> masterList = schedule.getItems();
+                List<Item> copy = new ArrayList<Item>(masterList);
                 String content = "Remember to bring: ";
 
-                for(int i = 0; i < masterList.size(); i++){
+                for(int i = 0; i < copy.size(); i++){
                     for(Item j : itemList){
-                        if(j.equals(masterList.get(i))){
-                            masterList.remove(i);
+                        if(j.equals(copy.get(i))){
+                            copy.remove(i);
                             i--;
                         }
                     }
                 }
 
-                if(masterList.size() == 0){
+                if(copy.size() == 0){
                     return;
                 }
 
-                if(masterList.size() > 0){
-                    mitem1.setText(masterList.get(0).getName());
+                if(copy.size() > 0){
+                    mitem1.setText(copy.get(0).getName());
                 }
 
                 if(masterList.size() > 1){
-                    mitem2.setText(masterList.get(1).getName());
+                    mitem2.setText(copy.get(1).getName());
                 }
 
-                for(Item i : masterList){
+                for(Item i : copy){
                     content = content + i.getName() + " ";
                 }
 
@@ -209,11 +224,37 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        display = (Button) findViewById(R.id.display);
+        display.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(itemList.size() > 0){
+                    item1.setText(itemList.get(0).getName());
+                }
+
+                if(itemList.size() > 1){
+                    item2.setText(itemList.get(1).getName());
+                }
+
+                if(itemList.size() > 2){
+                    item3.setText(itemList.get(2).getName());
+                }
+
+                if(itemList.size() > 3){
+                    item4.setText(itemList.get(3).getName());
+                }
+            }
+        });
     }
 
     public void openSettings(){
         Intent intent = new Intent(this, SettingsActivity.class);
         intent.putExtra("EXTRA_SCHEDULE", schedule);
+        try {
+            btSocket.close();
+        } catch (Exception e){}
 
         startActivity(intent);
     }
@@ -221,6 +262,9 @@ public class MainActivity extends AppCompatActivity {
     public void openSchedule(){
         Intent intent = new Intent(this, ScheduleActivity.class);
         intent.putExtra("EXTRA_SCHEDULE", schedule);
+        try {
+            btSocket.close();
+        } catch (Exception e){}
 
         startActivity(intent);
     }
@@ -306,12 +350,15 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             String tmp = "";
 
-            while (true) {
+            Long tStart = System.currentTimeMillis();
+            Long tEnd = System.currentTimeMillis();
+
+            while ((tEnd - tStart) > 2000) {
                 try {
                     // Read character by character
                     char a = (char) is.read();
 
-                    while (a != '\n') {
+                    while (a != '\n' || (tEnd - tStart) > 2000) {
                         tmp = tmp + a;
                         a = (char) is.read();
                     }
@@ -343,21 +390,7 @@ public class MainActivity extends AppCompatActivity {
             } catch(Exception e){}
 
             btStatus.setText("Connected");
-            if(itemList.size() > 0){
-                item1.setText(itemList.get(0).getName());
-            }
 
-            if(itemList.size() > 1){
-                item2.setText(itemList.get(1).getName());
-            }
-
-            if(itemList.size() > 2){
-                item3.setText(itemList.get(2).getName());
-            }
-
-            if(itemList.size() > 3){
-                item4.setText(itemList.get(3).getName());
-            }
 
             inputDone = true;
         }

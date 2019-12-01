@@ -182,28 +182,6 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         daysOfWeek.setAdapter(adapter);
         daysOfWeek.setOnItemSelectedListener(this);
 
-        /*
-        ArrayList<CharSequence> displayEvents = new ArrayList<CharSequence>();
-        if(schedule.getEvents().size() > 0) {
-            for (Event e : schedule.getEvents()) {
-                if(e != null)
-                displayEvents.add(e.getName());
-                System.out.println(displayEvents.get(0));
-            }
-        }
-
-        displayEvents.add("New");
-
-        ArrayAdapter<CharSequence> adapter2 = new ArrayAdapter<CharSequence>(SettingsActivity.this,
-            android.R.layout.simple_spinner_dropdown_item, displayEvents);
-
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        events.setAdapter(adapter2);
-
-        events.setOnItemSelectedListener(this);
-
-         */
-
         setUpEventSpinner();
 
         confItem.setOnClickListener(new View.OnClickListener() {
@@ -238,6 +216,9 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     public void openHome(){
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("EXTRA_SCHEDULE", schedule);
+        try {
+            btSocket.close();
+        } catch (Exception e){}
 
         startActivity(intent);
     }
@@ -248,6 +229,9 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     public void openSchedule(){
         Intent intent = new Intent(this, ScheduleActivity.class);
         intent.putExtra("EXTRA_SCHEDULE", schedule);
+        try {
+            btSocket.close();
+        } catch (Exception e){}
 
         startActivity(intent);
     }
@@ -338,7 +322,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
             } catch (Exception e) {
                 Context context = getApplicationContext();
                 CharSequence txt = "Failed to connect istream";
-                Toast toast = Toast.makeText(context, txt, Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(context, txt, Toast.LENGTH_SHORT);
                 toast.show();
             }
 
@@ -350,7 +334,10 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         public void run() {
             String tmp = "";
 
-            while (true) {
+            Long tStart = System.currentTimeMillis();
+            Long tEnd = System.currentTimeMillis();
+
+            while ((tEnd - tStart) < 2000) {
                 try {
                     // Read character by character
                     char a = (char) is.read();
@@ -363,7 +350,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                     // Stop reading on newline, generate string
                     final String string = new String(tmp.getBytes(), "UTF-8");
 
-                    // Store string to array of inputs, until 5 inputs have been read
+                    // Store string to inputs
                     input = string;
 
                     tag.setText("Tag ID: " + input);
