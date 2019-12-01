@@ -76,7 +76,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="20dp"
         android:layout_marginTop="37dp"
-        android:text="Perform First Time Setup of Tag"
+        android:text="Perform First Time Setup of Tag:\n Scan only one tag at a time!"
         android:textSize="20sp" />
 
     <Button
@@ -99,5 +99,79 @@
         android:layout_toEndOf="@+id/getSetup"
         android:text="Tag ID: "
         android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/itemName"
+        android:layout_width="183dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Enter Item Name" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/getSetup"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:text="Once Tag ID displays a number, enter the name of the item you scanned, and select the event the item is for. If you would like to create a new event, select new and enter the name and time of the event in the corresponding boxes" />
+
+    <Button
+        android:id="@+id/confirmItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/daySelect"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="Confirm Item" />
+
+    <Spinner
+        android:id="@+id/chooseEvent"
+        android:layout_width="175dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/textView"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/itemName" />
+
+    <EditText
+        android:id="@+id/eventName"
+        android:layout_width="184dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/itemName"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Enter Event Name" />
+
+    <Spinner
+        android:id="@+id/daySelect"
+        android:layout_width="175dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/chooseEvent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/eventName" />
+
+    <EditText
+        android:id="@+id/eventTime"
+        android:layout_width="186dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/eventName"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Enter Event Time" />
 
 </RelativeLayout>

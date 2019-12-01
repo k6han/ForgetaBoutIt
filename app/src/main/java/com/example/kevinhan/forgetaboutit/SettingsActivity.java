@@ -9,7 +9,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +25,7 @@ import java.util.UUID;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     static final UUID myID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
     static final String macAddress = "00:14:03:06:7E:E8";
@@ -43,8 +47,18 @@ public class SettingsActivity extends AppCompatActivity {
 
     Button getTag;
     TextView tag;
-    String[] inputs = new String[5];
+    String input = "";
     int inputIdx = 0;
+
+    Button confItem;
+    EditText itemName;
+    Item item;
+    Event event;
+    EditText eventName;
+    EditText eventTime;
+    Spinner events;
+    Spinner daysOfWeek;
+    DayWeek dayWeek = DayWeek.SUNDAY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +89,7 @@ public class SettingsActivity extends AppCompatActivity {
         // Initialize text and button for Bluetooth
         btStatus = (TextView) findViewById(R.id.statusBt);
 
+        // Bluetooth
         connBt = (Button) findViewById(R.id.connectBt);
         connBt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +146,7 @@ public class SettingsActivity extends AppCompatActivity {
         getTag = (Button) findViewById(R.id.getSetup);
         tag = (TextView) findViewById(R.id.displayTag);
 
+        // Scan for tag
         getTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,6 +169,27 @@ public class SettingsActivity extends AppCompatActivity {
 
             }
         });
+
+        itemName = (EditText) findViewById(R.id.itemName);
+        events = (Spinner) findViewById(R.id.chooseEvent);
+        confItem = (Button) findViewById(R.id.confirmItem);
+        daysOfWeek = (Spinner) findViewById(R.id.daySelect);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.DaysOfWeek, android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        daysOfWeek.setAdapter(adapter);
+        daysOfWeek.setOnItemSelectedListener(this);
+
+
+
+        confItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = itemName.getText().toString();
+                item = new Item(input, name);
+            }
+        });
     }
 
     /**
@@ -173,6 +210,45 @@ public class SettingsActivity extends AppCompatActivity {
         intent.putExtra("EXTRA_SCHEDULE", schedule);
 
         startActivity(intent);
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+        if(parent.getId() == R.id.daySelect){
+
+            String text = parent.getItemAtPosition(pos).toString();
+
+            switch(text){
+                case "Sunday":
+                    dayWeek = DayWeek.SUNDAY;
+                    break;
+                case "Monday":
+                    dayWeek = DayWeek.MONDAY;
+                    break;
+                case "Tuesday":
+                    dayWeek = DayWeek.TUESDAY;
+                    break;
+                case "Wednesday":
+                    dayWeek = DayWeek.WEDNESDAY;
+                    break;
+                case "Thursday":
+                    dayWeek = DayWeek.THURSDAY;
+                    break;
+                case "Friday":
+                    dayWeek = DayWeek.FRIDAY;
+                    break;
+                case "Saturday":
+                    dayWeek = DayWeek.SATURDAY;
+                    break;
+            }
+
+        } else if(parent.getId() == R.id.chooseEvent){
+
+        }
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        return;
     }
 
     /**
@@ -220,15 +296,14 @@ public class SettingsActivity extends AppCompatActivity {
                     final String string = new String(tmp.getBytes(), "UTF-8");
 
                     // Store string to array of inputs, until 5 inputs have been read
-                    if(inputIdx < 5){
-                        inputs[inputIdx] = string;
-                    } else {
-                        break;
-                    }
+                    input = string;
 
-                    tag.setText("Tag ID: " + inputs[0]);
+                    tag.setText("Tag ID: " + input);
 
                     tmp = "";
+                    if(input.length() > 0){
+                        break;
+                    }
 
                 } catch (Exception e) {
                     break;

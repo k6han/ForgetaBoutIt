@@ -20,15 +20,17 @@ public class Event implements Parcelable {
 	//time of day when this event starts
 	//represented as 24 hour clock
 	private int time;
+	private String name;
 
 	/**
 	 * Constructor for Event class
 	 * @param  time the time of the day this event occurs
 	 * @return      newly created Event object
 	 */
-	public Event(int time) {
+	public Event(int time, String name) {
 		items = new HashSet<Item>();
 		this.time = time;
+		this.name = name;
 	}
 
 	public Event(Parcel source){
@@ -68,6 +70,8 @@ public class Event implements Parcelable {
 	public int getTime() {
 		return time;
 	}
+
+	public String getName() { return name; }
 
 	/**
 	 * change the time of this event
