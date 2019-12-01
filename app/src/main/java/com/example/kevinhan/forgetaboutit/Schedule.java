@@ -32,7 +32,7 @@ public class Schedule implements Parcelable {
 	 * @param  dayWeek day of the week to start from
 	 * @return         newly created Schedule object
 	 */
-	public Schedule(DayWeek dayWeek) {
+	public Schedule(int dayWeek) {
 		Day first = null;
 		events = new ArrayList<Event>();
 		items = new ArrayList<Item>();
@@ -55,7 +55,7 @@ public class Schedule implements Parcelable {
 		}
 
  */
-		for(DayWeek dw : DayWeek.values()){
+		for(int dw = 0; dw < 7; dw++){
 			currDay = new Day(dw);
 			week[index] = currDay;
 			index++;
@@ -83,7 +83,7 @@ public class Schedule implements Parcelable {
 	 * @param dayWeek day of the week
 	 * @param event   event to be added
 	 */
-	public void addEvent(DayWeek dayWeek, Event event) {
+	public void addEvent(int dayWeek, Event event) {
 		events.add(event);
 		Day day = currDay;
 		while (day.getDayWeek() != dayWeek) {

@@ -20,7 +20,7 @@ public class Day implements Parcelable {
 	private List<Event> events;
 
 	//day and date of the week
-	private DayWeek dayWeek;
+	private int dayWeek;
 
 	//reference to the next day
 	private Day nextDay;
@@ -30,7 +30,7 @@ public class Day implements Parcelable {
 	 * @param  dayWeek day of the week this object represents
 	 * @return         newly created day object
 	 */
-	public Day(DayWeek dayWeek) {
+	public Day(int dayWeek) {
 		events = new ArrayList<Event>();
 		nextDay = null;
 		this.dayWeek = dayWeek;
@@ -38,7 +38,7 @@ public class Day implements Parcelable {
 
 	public Day(Parcel source){
 		events = source.createTypedArrayList(Event.CREATOR);
-		dayWeek = (DayWeek) source.readSerializable();
+		dayWeek = (int) source.readSerializable();
 		//nextDay = source.readParcelable(com.example.kevinhan.forgetaboutit.Day.class.getClassLoader());
 		nextDay = null;
 	}
@@ -63,15 +63,15 @@ public class Day implements Parcelable {
 	 * get the day of the week of this object
 	 * @return the day of the week
 	 */
-	public DayWeek getDayWeek() {
-		return dayWeek;
+	public int getDayWeek() {
+		return int;
 	}
 
 	/**
 	 * change the day of the week this object represents
 	 * @param dayWeek new day of the week
 	 */
-	public void setDayWeek(DayWeek dayWeek) {
+	public void setDayWeek(int dayWeek) {
 		this.dayWeek = dayWeek;
 	}
 

@@ -58,7 +58,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     EditText eventTime;
     Spinner events;
     Spinner daysOfWeek;
-    DayWeek dayWeek = DayWeek.SUNDAY;
+    int dayWeek = 6;
     boolean createEvent = false;
 
     @Override
@@ -250,25 +250,25 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
             switch(text){
                 case "Sunday":
-                    dayWeek = DayWeek.SUNDAY;
+                    dayWeek = 6;
                     break;
                 case "Monday":
-                    dayWeek = DayWeek.MONDAY;
+                    dayWeek = 0;
                     break;
                 case "Tuesday":
-                    dayWeek = DayWeek.TUESDAY;
+                    dayWeek = 1;
                     break;
                 case "Wednesday":
-                    dayWeek = DayWeek.WEDNESDAY;
+                    dayWeek = 2;
                     break;
                 case "Thursday":
-                    dayWeek = DayWeek.THURSDAY;
+                    dayWeek = 3;
                     break;
                 case "Friday":
-                    dayWeek = DayWeek.FRIDAY;
+                    dayWeek = 4;
                     break;
                 case "Saturday":
-                    dayWeek = DayWeek.SATURDAY;
+                    dayWeek = 5;
                     break;
             }
 
