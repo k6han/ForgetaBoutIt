@@ -38,7 +38,7 @@ public class Day implements Parcelable {
 
 	public Day(Parcel source){
 		events = source.createTypedArrayList(Event.CREATOR);
-		dayWeek = (int) source.readSerializable();
+		dayWeek = source.readInt();
 		//nextDay = source.readParcelable(com.example.kevinhan.forgetaboutit.Day.class.getClassLoader());
 		nextDay = null;
 	}
@@ -64,7 +64,7 @@ public class Day implements Parcelable {
 	 * @return the day of the week
 	 */
 	public int getDayWeek() {
-		return int;
+		return dayWeek;
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class Day implements Parcelable {
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeTypedList(events);
-		dest.writeSerializable(dayWeek);
+		dest.writeInt(dayWeek);
 	}
 
 	public static final Parcelable.Creator<Day>CREATOR

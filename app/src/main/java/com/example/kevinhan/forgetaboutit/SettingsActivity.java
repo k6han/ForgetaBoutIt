@@ -181,8 +181,10 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         daysOfWeek.setAdapter(adapter);
         daysOfWeek.setOnItemSelectedListener(this);
+        System.out.println("ofiaejfoinfigajreofsd");
 
         ArrayList<String> displayEvents = new ArrayList<String>();
+        System.out.println("ENDOWeijfnosnginroigsjeoirfj");
         if(schedule.getEvents().size() > 0) {
             for (Event e : schedule.getEvents()) {
                 if(e != null)
