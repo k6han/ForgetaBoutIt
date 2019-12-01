@@ -1,12 +1,17 @@
 package com.example.kevinhan.forgetaboutit;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +28,8 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
     static final UUID myID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
     static final String macAddress = "00:14:03:06:7E:E8";
+
+    NotificationManager notificationManager;
 
     Button toSettings;
     Button toSchedule;
@@ -46,10 +53,19 @@ public class MainActivity extends AppCompatActivity {
     TextView item3;
     TextView item4;
 
+    Button testNotif;
+
+    TextView mitem1;
+    TextView mitem2;
+
+    boolean inputDone = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        createNotificationChannel();
 
         Intent intent = getIntent();
         if(intent.hasExtra("EXTRA_SCHEDULE")){
@@ -136,6 +152,63 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        testNotif = (Button) findViewById(R.id.sendNotif);
+        testNotif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    os = btSocket.getOutputStream();
+
+                    os.write(1);
+
+                    itemList = new ArrayList<Item>();
+
+                    new ConnectedThread( btSocket );
+
+                } catch (Exception e){
+                    Context context = getApplicationContext();
+                    CharSequence txt = "Failed to send input";
+                    Toast toast = Toast.makeText(context, txt, Toast.LENGTH_LONG);
+                    toast.show();
+                }
+
+                while(true){
+                    if(inputDone) break;
+                }
+
+                List<Item> masterList = schedule.getItems();
+                String content = "Remember to bring: ";
+
+                for(int i = 0; i < masterList.size(); i++){
+                    for(Item j : itemList){
+                        if(j.equals(masterList.get(i))){
+                            masterList.remove(i);
+                            i--;
+                        }
+                    }
+                }
+
+                if(masterList.size() == 0){
+                    return;
+                }
+
+                if(masterList.size() > 0){
+                    mitem1.setText(masterList.get(0).getName());
+                }
+
+                if(masterList.size() > 1){
+                    mitem2.setText(masterList.get(1).getName());
+                }
+
+                for(Item i : masterList){
+                    content = content + i.getName() + " ";
+                }
+
+                sendNotif(content);
+
+            }
+        });
     }
 
     public void openSettings(){
@@ -150,6 +223,25 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("EXTRA_SCHEDULE", schedule);
 
         startActivity(intent);
+    }
+
+    public void sendNotif(String content){
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "!FAI")
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("Missing Items!")
+                .setContentText(content)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(content))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
+
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        PendingIntent pi = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        builder.setContentIntent(pi);
+
+        notificationManager.notify(5, builder.build());
     }
 
     public void btConnection(){
@@ -266,8 +358,26 @@ public class MainActivity extends AppCompatActivity {
             if(itemList.size() > 3){
                 item4.setText(itemList.get(3).getName());
             }
+
+            inputDone = true;
         }
 
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "!ForgetaBoutIt";
+            String description = "Notification channel for !ForgetaBoutIt";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("!FAI", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
 }
