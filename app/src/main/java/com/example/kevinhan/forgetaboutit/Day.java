@@ -64,7 +64,7 @@ public class Day implements Parcelable {
 	 * @return the day of the week
 	 */
 	public int getDayWeek() {
-		return int;
+		return dayWeek;
 	}
 
 	/**
