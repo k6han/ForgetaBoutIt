@@ -109,33 +109,10 @@ public class MainActivity extends AppCompatActivity {
         btStatus.setText("Connecting");
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(!btAdapter.isEnabled())
-        {
-            Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBluetooth, 0);
+
+        if(btAdapter != null){
+            btConnection();
         }
-        btDevice = btAdapter.getRemoteDevice(macAddress);
-
-        String pin = "1234";
-        btDevice.setPin(pin.getBytes());
-        btDevice.createBond();
-
-        try {
-            btSocket = btDevice.createRfcommSocketToServiceRecord(myID);
-        } catch (Exception e) {}
-
-        while( !btSocket.isConnected()){
-
-            try{
-                btSocket.connect();
-            } catch(Exception e){
-                Context context = getApplicationContext();
-                CharSequence txt = "Failed to connect, retrying";
-                Toast toast = Toast.makeText(context, txt, Toast.LENGTH_LONG);
-                toast.show();
-            }
-        }
-        btStatus.setText("Connected");
 
         refresh = (Button) findViewById(R.id.refresh);
         refresh.setOnClickListener(new View.OnClickListener() {
@@ -173,6 +150,36 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("EXTRA_SCHEDULE", schedule);
 
         startActivity(intent);
+    }
+
+    public void btConnection(){
+        if(!btAdapter.isEnabled())
+        {
+            Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBluetooth, 0);
+        }
+        btDevice = btAdapter.getRemoteDevice(macAddress);
+
+        String pin = "1234";
+        btDevice.setPin(pin.getBytes());
+        btDevice.createBond();
+
+        try {
+            btSocket = btDevice.createRfcommSocketToServiceRecord(myID);
+        } catch (Exception e) {}
+
+        while( !btSocket.isConnected()){
+
+            try{
+                btSocket.connect();
+            } catch(Exception e){
+                Context context = getApplicationContext();
+                CharSequence txt = "Failed to connect, retrying";
+                Toast toast = Toast.makeText(context, txt, Toast.LENGTH_LONG);
+                toast.show();
+            }
+        }
+        btStatus.setText("Connected");
     }
 
     private class ConnectedThread extends Thread {

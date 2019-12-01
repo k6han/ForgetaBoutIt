@@ -182,6 +182,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         daysOfWeek.setAdapter(adapter);
         daysOfWeek.setOnItemSelectedListener(this);
 
+        /*
         ArrayList<CharSequence> displayEvents = new ArrayList<CharSequence>();
         if(schedule.getEvents().size() > 0) {
             for (Event e : schedule.getEvents()) {
@@ -201,6 +202,10 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
         events.setOnItemSelectedListener(this);
 
+         */
+
+        setUpEventSpinner();
+
         confItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -218,6 +223,8 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                     createEvent = false;
 
                     schedule.addEvent(dayWeek, event);
+
+                    setUpEventSpinner();
                 }
 
                 schedule.addItem(event, item);
@@ -243,6 +250,27 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         intent.putExtra("EXTRA_SCHEDULE", schedule);
 
         startActivity(intent);
+    }
+
+    public void setUpEventSpinner(){
+        ArrayList<CharSequence> displayEvents = new ArrayList<CharSequence>();
+        if(schedule.getEvents().size() > 0) {
+            for (Event e : schedule.getEvents()) {
+                if(e != null)
+                    displayEvents.add(e.getName());
+                System.out.println(displayEvents.get(0));
+            }
+        }
+
+        displayEvents.add("New");
+
+        ArrayAdapter<CharSequence> adapter2 = new ArrayAdapter<CharSequence>(SettingsActivity.this,
+                android.R.layout.simple_spinner_dropdown_item, displayEvents);
+
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        events.setAdapter(adapter2);
+
+        events.setOnItemSelectedListener(this);
     }
 
     public void onItemSelected(AdapterView<?> parent, View view,
