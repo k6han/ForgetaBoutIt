@@ -31,29 +31,29 @@ public class MainActivity extends AppCompatActivity {
             Calendar calendar = Calendar.getInstance();
             int day = calendar.get(Calendar.DAY_OF_WEEK);
 
-            int currDay = 6;
+            int currDay = 0;
 
             switch (day) {
                 case Calendar.SUNDAY:
-                    currDay = 6;
-                    break;
-                case Calendar.MONDAY:
                     currDay = 0;
                     break;
-                case Calendar.TUESDAY:
+                case Calendar.MONDAY:
                     currDay = 1;
                     break;
-                case Calendar.WEDNESDAY:
+                case Calendar.TUESDAY:
                     currDay = 2;
                     break;
-                case Calendar.THURSDAY:
+                case Calendar.WEDNESDAY:
                     currDay = 3;
                     break;
-                case Calendar.FRIDAY:
+                case Calendar.THURSDAY:
                     currDay = 4;
                     break;
-                case Calendar.SATURDAY:
+                case Calendar.FRIDAY:
                     currDay = 5;
+                    break;
+                case Calendar.SATURDAY:
+                    currDay = 6;
                     break;
             }
 

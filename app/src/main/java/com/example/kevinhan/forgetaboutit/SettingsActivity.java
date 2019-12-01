@@ -252,25 +252,25 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
             switch(text){
                 case "Sunday":
-                    dayWeek = 6;
-                    break;
-                case "Monday":
                     dayWeek = 0;
                     break;
-                case "Tuesday":
+                case "Monday":
                     dayWeek = 1;
                     break;
-                case "Wednesday":
+                case "Tuesday":
                     dayWeek = 2;
                     break;
-                case "Thursday":
+                case "Wednesday":
                     dayWeek = 3;
                     break;
-                case "Friday":
+                case "Thursday":
                     dayWeek = 4;
                     break;
-                case "Saturday":
+                case "Friday":
                     dayWeek = 5;
+                    break;
+                case "Saturday":
+                    dayWeek = 6;
                     break;
             }
 
