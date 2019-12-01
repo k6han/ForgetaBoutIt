@@ -98,6 +98,49 @@ public class Event implements Parcelable {
 		return result;
 	}
 
+	public String getHeader() {
+		String result = "";
+		int hours = time / 100;
+		boolean am = true;
+		if (hours == 0) {
+			result += "12";
+			am = true;
+		}
+		else if (1 <= hours && hours <= 11) {
+			result += hours;
+			am = true;
+		}
+		else if (hours == 12) {
+			result += "12";
+			am = false;
+		}
+		else {
+			result += (hours - 12);
+			am = false;
+		}
+		result += ":" + time % 100;
+		if (am) {
+			result += " am";
+		}
+		else {
+			result += " pm";
+		}
+		result += " - ";
+		result += name;
+		return result;
+	}
+
+	public String getItemsFormat() {
+		String result = "Items: ";
+		if (items.isEmpty()) {
+			result += "none";
+			return result;
+		}
+		result += items.toString().substring(1);
+		result = result.substring(0,result.length()-1);
+		return result;
+	}
+
 	@Override
 	public int describeContents() {
 		return 0;
