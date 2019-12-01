@@ -92,15 +92,52 @@ public class Schedule implements Parcelable {
 	public Set<Item> getMissingItems(int time, Set<Item> items) {
 		Set<Item> result = new HashSet<Item>();
 		for (Event event : currDay.getEvents()) {
-			if (event.getTime() - time < ADV_NOTIF ||
-				(time > 2400 - ADV_NOTIF &&
-				event.getTime() + 2400 - time < ADV_NOTIF)) {
+			if (this.getTimeDiff(event.getTime(),time) < ADV_NOTIF) {
 				for (Item missing : event.getMissingItems(items)) {
 					result.add(missing);
 				}
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * get the number of minutes between two times
+	 * @param  time1 first time
+	 * @param  time2 second time
+	 * @return       number of minutes in between
+	 */
+	private static int getTimeDiff(int time1, int time2) {
+		if (time1 < time2) {
+			int temp = time1;
+			time1 = time2;
+			time2 = temp;
+		}
+
+		//time1 >= time2
+		int hour1 = time1 / 100;
+		int hour2 = time2 / 100;
+		int min1 = time1 % 100;
+		int min2 = time2 % 100;
+
+		if (min1 < min2) {
+			hour1--;
+			min1 += 60;
+		}
+		if (hour1 < hour2) {
+			hour1 += 24;
+		}
+		int hour3 = hour1 - hour2;
+		int min3 = min1 - min2;
+		if (min3 >= 60) {
+			min3 -= 60;
+			hour3++;
+		}
+		if (hour3 > 12) {
+			hour3 = 24 - hour3;
+			min3 = 60 - min3;
+		}
+		return hour3 * 60 + min3;
 	}
 
 	@Override
