@@ -298,7 +298,6 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     private class ConnectedThread extends Thread {
         BluetoothSocket bts;
         InputStream is;
-        byte[] buffer;
 
         public ConnectedThread(BluetoothSocket b) {
 
