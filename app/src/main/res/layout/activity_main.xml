@@ -133,7 +133,7 @@
         android:layout_toEndOf="@+id/refresh"
         android:text="Display" />
 
-    <!--
+
     <TextView
         android:id="@+id/textView5"
         android:layout_width="200dp"
@@ -164,6 +164,6 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="15dp"
         android:textSize="18sp" />
-        -->
+
 
 </RelativeLayout>

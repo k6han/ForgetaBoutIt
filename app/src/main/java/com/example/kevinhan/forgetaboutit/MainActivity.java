@@ -107,6 +107,14 @@ public class MainActivity extends AppCompatActivity {
             schedule = new Schedule(currDay);
         }
 
+        item1 = (TextView) findViewById(R.id.item1);
+        item2 = (TextView) findViewById(R.id.item2);
+        item3 = (TextView) findViewById(R.id.item3);
+        item4 = (TextView) findViewById(R.id.item4);
+
+        mitem1 = (TextView) findViewById(R.id.mitem1);
+        mitem2 = (TextView) findViewById(R.id.mitem2);
+
         toSettings = (Button)findViewById(R.id.toSettings);
         toSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,12 +147,12 @@ public class MainActivity extends AppCompatActivity {
                     btConnection();
                 }
 
+                itemList = new ArrayList<Item>();
+
                 try {
                     os = btSocket.getOutputStream();
 
                     os.write(1);
-
-                    itemList = new ArrayList<Item>();
 
                     new ConnectedThread( btSocket );
 
@@ -163,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
         testNotif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                /*
                 if(btAdapter != null || (btSocket != null && !btSocket.isConnected())){
                     btConnection();
                 }
@@ -191,6 +199,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
+                 */
+
                 List<Item> masterList = schedule.getItems();
                 List<Item> copy = new ArrayList<Item>(masterList);
                 String content = "Remember to bring: ";
@@ -210,10 +220,14 @@ public class MainActivity extends AppCompatActivity {
 
                 if(copy.size() > 0){
                     mitem1.setText(copy.get(0).getName());
+                } else {
+                    mitem1.setText("None");
                 }
 
-                if(masterList.size() > 1){
+                if(copy.size() > 1){
                     mitem2.setText(copy.get(1).getName());
+                } else {
+                    mitem2.setText("None");
                 }
 
                 for(Item i : copy){
@@ -232,18 +246,26 @@ public class MainActivity extends AppCompatActivity {
 
                 if(itemList.size() > 0){
                     item1.setText(itemList.get(0).getName());
+                } else {
+                    item1.setText("None");
                 }
 
                 if(itemList.size() > 1){
                     item2.setText(itemList.get(1).getName());
+                } else {
+                    item2.setText("None");
                 }
 
                 if(itemList.size() > 2){
                     item3.setText(itemList.get(2).getName());
+                } else {
+                    item3.setText("None");
                 }
 
                 if(itemList.size() > 3){
                     item4.setText(itemList.get(3).getName());
+                } else {
+                    item4.setText("None");
                 }
             }
         });
@@ -353,12 +375,12 @@ public class MainActivity extends AppCompatActivity {
             Long tStart = System.currentTimeMillis();
             Long tEnd = System.currentTimeMillis();
 
-            while ((tEnd - tStart) > 2000) {
+            while (true) {
                 try {
                     // Read character by character
                     char a = (char) is.read();
 
-                    while (a != '\n' || (tEnd - tStart) > 2000) {
+                    while (a != '\n') {
                         tmp = tmp + a;
                         a = (char) is.read();
                     }
