@@ -181,23 +181,24 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         daysOfWeek.setAdapter(adapter);
         daysOfWeek.setOnItemSelectedListener(this);
-        System.out.println("ofiaejfoinfigajreofsd");
 
-        ArrayList<String> displayEvents = new ArrayList<String>();
-        System.out.println("ENDOWeijfnosnginroigsjeoirfj");
+        ArrayList<CharSequence> displayEvents = new ArrayList<CharSequence>();
         if(schedule.getEvents().size() > 0) {
             for (Event e : schedule.getEvents()) {
                 if(e != null)
                 displayEvents.add(e.getName());
+                System.out.println(displayEvents.get(0));
             }
         }
 
         displayEvents.add("New");
 
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(SettingsActivity.this,
+        ArrayAdapter<CharSequence> adapter2 = new ArrayAdapter<CharSequence>(SettingsActivity.this,
             android.R.layout.simple_spinner_dropdown_item, displayEvents);
+
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         events.setAdapter(adapter2);
+
         events.setOnItemSelectedListener(this);
 
         confItem.setOnClickListener(new View.OnClickListener() {
