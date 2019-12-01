@@ -93,6 +93,15 @@ public class Item implements Parcelable {
 		else return false;
 	}
 
+	/**
+	 * override from Object class
+	 * @return string to print
+	 */
+	@Override
+	public String toString() {
+		return name;
+	}
+
 	//needed for hashing
 	/**
 	 * hash function for this class

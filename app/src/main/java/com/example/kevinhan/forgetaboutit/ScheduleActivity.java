@@ -9,12 +9,22 @@ import android.content.res.Resources;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class ScheduleActivity extends AppCompatActivity {
 
     Button toHome;
     Button toSettings;
 
     TextView scheduleHeader;
+
+    TextView event1;
+    TextView event2;
+    TextView event3;
+    TextView items1;
+    TextView items2;
+    TextView items3;
 
     Schedule schedule;
 
@@ -47,6 +57,31 @@ public class ScheduleActivity extends AppCompatActivity {
         Day currDay = schedule.getDay();
         Resources res = getResources();
         scheduleHeader.setText(res.getStringArray(R.array.DaysOfWeek)[currDay.getDayWeek()]);
+
+        TextView event1 = (TextView)findViewById(R.id.event1);
+        TextView event2 = (TextView)findViewById(R.id.event2);
+        TextView event3 = (TextView)findViewById(R.id.event3);
+        TextView items1 = (TextView)findViewById(R.id.items1);
+        TextView items2 = (TextView)findViewById(R.id.items2);
+        TextView items3 = (TextView)findViewById(R.id.items3);
+
+        event1.setVisibility(View.INVISIBLE);
+        items1.setVisibility(View.INVISIBLE);
+        event1.setVisibility(View.INVISIBLE);
+        items1.setVisibility(View.INVISIBLE);
+        event1.setVisibility(View.INVISIBLE);
+        items1.setVisibility(View.INVISIBLE);
+
+        List<Event> eventList = currDay.getEvents();
+        if (eventList.size() >= 1) {
+            displayEvent(eventList.get(0),1);
+        }
+        if (eventList.size() >= 2) {
+            displayEvent(eventList.get(1),2);
+        }
+        if (eventList.size() >= 3) {
+            displayEvent(eventList.get(2),3);
+        }
     }
 
     public void openHome(){
@@ -61,5 +96,36 @@ public class ScheduleActivity extends AppCompatActivity {
         intent.putExtra("EXTRA_SCHEDULE", schedule);
 
         startActivity(intent);
+    }
+
+    public void displayEvent(Event ev, int number) {
+
+        TextView event1 = (TextView)findViewById(R.id.event1);
+        TextView event2 = (TextView)findViewById(R.id.event2);
+        TextView event3 = (TextView)findViewById(R.id.event3);
+        TextView items1 = (TextView)findViewById(R.id.items1);
+        TextView items2 = (TextView)findViewById(R.id.items2);
+        TextView items3 = (TextView)findViewById(R.id.items3);
+
+        switch (number) {
+            case 1:
+                event1.setText(ev.getHeader());
+                items1.setText(ev.getItemsFormat());
+                event1.setVisibility(View.VISIBLE);
+                items1.setVisibility(View.VISIBLE);
+                break;
+            case 2:
+                event2.setText(ev.getHeader());
+                items2.setText(ev.getItemsFormat());
+                event2.setVisibility(View.VISIBLE);
+                items2.setVisibility(View.VISIBLE);
+                break;
+            case 3:
+                event3.setText(ev.getHeader());
+                items3.setText(ev.getItemsFormat());
+                event3.setVisibility(View.VISIBLE);
+                items3.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 }
