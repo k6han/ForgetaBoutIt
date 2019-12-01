@@ -87,7 +87,10 @@ public class Item implements Parcelable {
 		if (!(other instanceof Item))
 			return false;
 		//there should not be two Item objects with the same id
+		if(id != null)
 		return (this.id.equals(((Item)other).id));
+
+		else return false;
 	}
 
 	//needed for hashing
@@ -97,7 +100,10 @@ public class Item implements Parcelable {
 	 */
 	@Override
 	public int hashCode() {
+		if(id != null)
 		return id.hashCode();
+
+		else return -1;
 	}
 
 	@Override

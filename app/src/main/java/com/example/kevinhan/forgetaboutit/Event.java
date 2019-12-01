@@ -103,7 +103,9 @@ public class Event implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeTypedArray((Parcelable[])items.toArray(), 0);
+		Item[] itemList = new Item[items.size()];
+		items.toArray(itemList);
+		dest.writeTypedArray(itemList, 0);
 		dest.writeInt(time);
 	}
 

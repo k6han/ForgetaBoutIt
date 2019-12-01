@@ -3,6 +3,7 @@ package com.example.kevinhan.forgetaboutit;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
@@ -20,6 +21,11 @@ public class Schedule implements Parcelable {
 
 	//reference to the current day
 	private Day currDay;
+	private Day[] week;
+	private int index;
+
+	private List<Event> events;
+	private List<Item> items;
 
 	/**
 	 * Constructor for Schedule class
@@ -28,24 +34,48 @@ public class Schedule implements Parcelable {
 	 */
 	public Schedule(DayWeek dayWeek) {
 		Day first = null;
+		events = new ArrayList<Event>();
+		items = new ArrayList<Item>();
+		week = new Day[7];
+		index = 0;
+/*
 		for (DayWeek dw : DayWeek.values()) {
 			if (currDay == null) {
 				currDay = new Day(dw);
 				first = currDay;
+				week[index] = currDay;
+				index++;
 			}
 			else {
 				currDay.setNextDay(new Day(dw));
+				week[index] = currDay.nextDay();
+				index++;
 				currDay = currDay.nextDay();
 			}
 		}
-		currDay.setNextDay(first);
+
+ */
+		for(DayWeek dw : DayWeek.values()){
+			currDay = new Day(dw);
+			week[index] = currDay;
+			index++;
+			index = index % 7;
+			System.out.println(dw.name() + index);
+		}
+//		currDay.setNextDay(first);
 		while (currDay.getDayWeek() != dayWeek) {
-			currDay = currDay.nextDay();
+			currDay = week[index];
+			index++;
+			index = index % 7;
 		}
 	}
 
 	public Schedule(Parcel source){
-		currDay = source.readParcelable(com.example.kevinhan.forgetaboutit.Day.class.getClassLoader());
+		currDay = source.readParcelable(Day.class.getClassLoader());
+		events = source.createTypedArrayList(Event.CREATOR);
+		items = source.createTypedArrayList(Item.CREATOR);
+		week = source.createTypedArray(Day.CREATOR);
+		index = source.readInt();
 	}
 
 	/**
@@ -54,11 +84,31 @@ public class Schedule implements Parcelable {
 	 * @param event   event to be added
 	 */
 	public void addEvent(DayWeek dayWeek, Event event) {
+		events.add(event);
 		Day day = currDay;
 		while (day.getDayWeek() != dayWeek) {
-			day = day.nextDay();
+			index++;
+			index = index % 7;
+			day = week[index];
 		}
 		day.add(event);
+	}
+
+	public void addItem(Event event, Item item) {
+		items.add(item);
+		for(Event e : events){
+			if( e.equals(event) ){
+				e.addItem(item);
+			}
+		}
+	}
+
+	public List<Event> getEvents(){
+		return events;
+	}
+
+	public List<Item> getItems(){
+		return items;
 	}
 
 	/**
@@ -148,6 +198,10 @@ public class Schedule implements Parcelable {
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeParcelable(currDay, 0);
+		dest.writeTypedList(events);
+		dest.writeTypedList(items);
+		dest.writeTypedArray(week, 0);
+		dest.writeInt(index);
 	}
 
 	public static final Parcelable.Creator<Schedule>CREATOR

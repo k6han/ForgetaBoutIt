@@ -59,6 +59,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     Spinner events;
     Spinner daysOfWeek;
     DayWeek dayWeek = DayWeek.SUNDAY;
+    boolean createEvent = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,13 +182,42 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         daysOfWeek.setAdapter(adapter);
         daysOfWeek.setOnItemSelectedListener(this);
 
+        ArrayList<String> displayEvents = new ArrayList<String>();
+        if(schedule.getEvents().size() > 0) {
+            for (Event e : schedule.getEvents()) {
+                if(e != null)
+                displayEvents.add(e.getName());
+            }
+        }
 
+        displayEvents.add("New");
+
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(SettingsActivity.this,
+            android.R.layout.simple_spinner_dropdown_item, displayEvents);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        events.setAdapter(adapter2);
+        events.setOnItemSelectedListener(this);
 
         confItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String name = itemName.getText().toString();
                 item = new Item(input, name);
+
+                if(createEvent){
+                    eventName = (EditText) findViewById(R.id.eventName);
+                    eventTime = (EditText) findViewById(R.id.eventTime);
+
+                    String n = eventName.getText().toString();
+                    int t = Integer.parseInt(eventTime.getText().toString());
+
+                    event = new Event(t, n);
+                    createEvent = false;
+
+                    schedule.addEvent(dayWeek, event);
+                }
+
+                schedule.addItem(event, item);
             }
         });
     }
@@ -243,7 +273,15 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
             }
 
         } else if(parent.getId() == R.id.chooseEvent){
-
+            if(parent.getItemAtPosition(pos).toString().equals("New")){
+                createEvent = true;
+            } else {
+                for(Event e : schedule.getEvents()){
+                    if( e.getName().equals(parent.getItemAtPosition(pos).toString()) ){
+                        event = e;
+                    }
+                }
+            }
         }
     }
 
