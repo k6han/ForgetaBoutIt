@@ -390,6 +390,7 @@ public class MainActivity extends AppCompatActivity {
 
                     for(Item i : masterList){
                         if(i.getId().equals(string)){
+                            if(!itemList.contains(i))
                             itemList.add(i);
                         }
                     }
