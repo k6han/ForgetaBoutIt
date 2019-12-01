@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+import android.content.res.Resources;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +13,8 @@ public class ScheduleActivity extends AppCompatActivity {
 
     Button toHome;
     Button toSettings;
+
+    TextView scheduleHeader;
 
     Schedule schedule;
 
@@ -37,6 +41,12 @@ public class ScheduleActivity extends AppCompatActivity {
                 openSettings();
             }
         });
+
+        scheduleHeader = (TextView)findViewById(R.id.scheduleHeader);
+
+        Day currDay = schedule.getDay();
+        Resources res = getResources();
+        scheduleHeader.setText(res.getStringArray(R.array.DaysOfWeek)[currDay.getDayWeek()]);
     }
 
     public void openHome(){
