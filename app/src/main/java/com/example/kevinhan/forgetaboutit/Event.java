@@ -35,6 +35,8 @@ public class Event implements Parcelable {
 
 	public Event(Parcel source){
 		items = new HashSet<Item>(Arrays.asList(source.createTypedArray(com.example.kevinhan.forgetaboutit.Item.CREATOR)));
+		time = source.readInt();
+		name = source.readString();
 	}
 
 	/**
@@ -107,6 +109,7 @@ public class Event implements Parcelable {
 		items.toArray(itemList);
 		dest.writeTypedArray(itemList, 0);
 		dest.writeInt(time);
+		dest.writeString(name);
 	}
 
 	public static final Parcelable.Creator<Event>CREATOR
