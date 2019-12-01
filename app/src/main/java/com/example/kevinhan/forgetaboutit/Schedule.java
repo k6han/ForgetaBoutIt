@@ -60,7 +60,6 @@ public class Schedule implements Parcelable {
 			week[index] = currDay;
 			index++;
 			index = index % 7;
-			System.out.println(dw + "" + index);
 		}
 //		currDay.setNextDay(first);
 		while (currDay.getDayWeek() != dayWeek) {
