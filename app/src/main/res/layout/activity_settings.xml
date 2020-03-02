@@ -110,7 +110,7 @@
         android:layout_marginTop="15dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Enter Item Name" />
+        android:hint="Enter Item Name" />
 
     <TextView
         android:id="@+id/textView"
@@ -151,7 +151,7 @@
         android:layout_marginTop="15dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Enter Event Name" />
+        android:hint="Enter Event Name" />
 
     <Spinner
         android:id="@+id/daySelect"
@@ -172,6 +172,6 @@
         android:layout_marginTop="20dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Enter Event Time" />
+        android:hint="Enter Event Time" />
 
 </RelativeLayout>
