@@ -40,6 +40,8 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     BluetoothDevice btDevice;
     BluetoothSocket btSocket;
 
+    ConnectedThread thread = null;
+
     InputStream is;
     OutputStream os;
 
@@ -127,7 +129,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                     btSocket = btDevice.createRfcommSocketToServiceRecord(myID);
                 } catch (Exception e) {}
 
-                while( !btSocket.isConnected()){
+                while( !btSocket.isConnected() ){
 
                     try{
                         btSocket.connect();
@@ -159,7 +161,12 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                     os.write(1);
 
                     // Attempt to read input in separate thread
-                    new ConnectedThread( btSocket );
+                    if(thread == null) {
+                        thread = new ConnectedThread(btSocket);
+                    } else {
+                        thread.cancel();
+                        thread = new ConnectedThread(btSocket);
+                    }
 
                 } catch(Exception e){
                     Context context = getApplicationContext();

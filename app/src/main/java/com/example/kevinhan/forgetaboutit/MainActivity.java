@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     TextView mitem1;
     TextView mitem2;
 
+    ConnectedThread thread = null;
+
     boolean inputDone = false;
 
     @Override
@@ -154,7 +156,12 @@ public class MainActivity extends AppCompatActivity {
 
                     os.write(1);
 
-                    new ConnectedThread( btSocket );
+                    if(thread == null) {
+                        thread = new ConnectedThread(btSocket);
+                    } else {
+                        thread.cancel();
+                        thread = new ConnectedThread(btSocket);
+                    }
 
                 } catch (Exception e){
                     Context context = getApplicationContext();
@@ -171,35 +178,6 @@ public class MainActivity extends AppCompatActivity {
         testNotif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                if(btAdapter != null || (btSocket != null && !btSocket.isConnected())){
-                    btConnection();
-                }
-
-                try {
-                    os = btSocket.getOutputStream();
-
-                    os.write(1);
-
-                    itemList = new ArrayList<Item>();
-
-                    new ConnectedThread( btSocket );
-
-                } catch (Exception e){
-                    Context context = getApplicationContext();
-                    CharSequence txt = "Failed to send input";
-                    Toast toast = Toast.makeText(context, txt, Toast.LENGTH_LONG);
-                    toast.show();
-                }
-
-                while(true){
-                    if(inputDone) {
-                        inputDone = false;
-                        break;
-                    }
-                }
-
-                 */
 
                 List<Item> masterList = schedule.getItems();
                 List<Item> copy = new ArrayList<Item>(masterList);
