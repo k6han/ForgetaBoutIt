@@ -17,6 +17,9 @@ public class ScheduleActivity extends AppCompatActivity {
     Button toHome;
     Button toSettings;
 
+    Button prevDay;
+    Button nextDay;
+
     TextView scheduleHeader;
 
     TextView event1;
@@ -27,6 +30,8 @@ public class ScheduleActivity extends AppCompatActivity {
     TextView items3;
 
     Schedule schedule;
+
+    Day currDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,23 +59,42 @@ public class ScheduleActivity extends AppCompatActivity {
 
         scheduleHeader = (TextView)findViewById(R.id.scheduleHeader);
 
-        Day currDay = schedule.getDay();
+        currDay = schedule.getDay();
+
+        event1 = (TextView)findViewById(R.id.event1);
+        event2 = (TextView)findViewById(R.id.event2);
+        event3 = (TextView)findViewById(R.id.event3);
+        items1 = (TextView)findViewById(R.id.items1);
+        items2 = (TextView)findViewById(R.id.items2);
+        items3 = (TextView)findViewById(R.id.items3);
+
+        prevDay = (Button)findViewById(R.id.prevDay);
+        prevDay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currDay = schedule.getPrevDay(currDay.getDayWeek());
+                displayDay();
+            }
+        });
+
+        nextDay = (Button)findViewById(R.id.nextDay);
+        nextDay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currDay = schedule.getNextDay(currDay.getDayWeek());
+                displayDay();
+            }
+        });
+
+
+        displayDay();
+    }
+
+    public void displayDay() {
         Resources res = getResources();
         scheduleHeader.setText(res.getStringArray(R.array.DaysOfWeek)[currDay.getDayWeek()]);
 
-        TextView event1 = (TextView)findViewById(R.id.event1);
-        TextView event2 = (TextView)findViewById(R.id.event2);
-        TextView event3 = (TextView)findViewById(R.id.event3);
-        TextView items1 = (TextView)findViewById(R.id.items1);
-        TextView items2 = (TextView)findViewById(R.id.items2);
-        TextView items3 = (TextView)findViewById(R.id.items3);
-
-        event1.setVisibility(View.INVISIBLE);
-        items1.setVisibility(View.INVISIBLE);
-        event1.setVisibility(View.INVISIBLE);
-        items1.setVisibility(View.INVISIBLE);
-        event1.setVisibility(View.INVISIBLE);
-        items1.setVisibility(View.INVISIBLE);
+        hideAllEvents();
 
         List<Event> eventList = currDay.getEvents();
         if (eventList.size() >= 1) {
@@ -82,6 +106,15 @@ public class ScheduleActivity extends AppCompatActivity {
         if (eventList.size() >= 3) {
             displayEvent(eventList.get(2),3);
         }
+    }
+
+    public void hideAllEvents() {
+        event1.setVisibility(View.INVISIBLE);
+        items1.setVisibility(View.INVISIBLE);
+        event1.setVisibility(View.INVISIBLE);
+        items1.setVisibility(View.INVISIBLE);
+        event1.setVisibility(View.INVISIBLE);
+        items1.setVisibility(View.INVISIBLE);
     }
 
     public void openHome(){
