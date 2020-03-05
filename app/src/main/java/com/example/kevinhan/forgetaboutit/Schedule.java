@@ -77,6 +77,22 @@ public class Schedule implements Parcelable {
 		index = source.readInt();
 	}
 
+	public Day getPrevDay(int dayWeek) {
+		dayWeek--;
+		if (dayWeek < 0) {
+			dayWeek = 6;
+		}
+		return week[dayWeek];
+	}
+
+	public Day getNextDay(int dayWeek) {
+		dayWeek++;
+		if (dayWeek > 6) {
+			dayWeek = 0;
+		}
+		return week[dayWeek];
+	}
+
 	/**
 	 * adds event to specified day of the week
 	 * @param dayWeek day of the week
