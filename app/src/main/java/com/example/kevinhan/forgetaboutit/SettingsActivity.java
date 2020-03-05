@@ -109,6 +109,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                     CharSequence txt = "Device does not support bluetooth";
                     Toast toast = Toast.makeText(context, txt, Toast.LENGTH_LONG);
                     toast.show();
+                    return;
                 }
 
                 if(!btAdapter.isEnabled())
@@ -154,6 +155,10 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void onClick(View v) {
 
+                if(btSocket == null || !btSocket.isConnected()){
+                    return;
+                }
+
                 try{
                     // Prompt arduino for input
                     os = btSocket.getOutputStream();
@@ -194,6 +199,11 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         confItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(input.length() == 0){
+                    return;
+                }
+
                 String name = itemName.getText().toString();
                 item = new Item(input, name);
 

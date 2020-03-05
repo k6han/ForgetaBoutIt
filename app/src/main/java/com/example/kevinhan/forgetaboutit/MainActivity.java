@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     TextView item4;
 
     Button testNotif;
-
+    Button connect;
     Button display;
 
     TextView mitem1;
@@ -139,14 +139,25 @@ public class MainActivity extends AppCompatActivity {
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
+        connect = (Button) findViewById(R.id.conBt);
+        connect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(btAdapter != null || (btSocket != null && !btSocket.isConnected())){
+                    btConnection();
+                }
+            }
+        });
+
 
         refresh = (Button) findViewById(R.id.refresh);
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(btAdapter != null || (btSocket != null && !btSocket.isConnected())){
-                    btConnection();
+                if(btSocket == null || !btSocket.isConnected()){
+                    btStatus.setText("Please connect");
+                    return;
                 }
 
                 itemList = new ArrayList<Item>();
@@ -221,6 +232,10 @@ public class MainActivity extends AppCompatActivity {
         display.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(itemList == null){
+                    return;
+                }
 
                 if(itemList.size() > 0){
                     item1.setText(itemList.get(0).getName());
